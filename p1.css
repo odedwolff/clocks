@@ -1,0 +1,30 @@
+#svg1{
+	width:200px;
+	height:500px;
+}
+
+
+#avcd{
+  fill: #ace63c;
+  stroke: blue;  
+}
+#avcd:hover {
+  fill: none;
+  stroke: red;  
+}
+
+
+#label1{
+  //fill: #ace63c;
+  color: green;  
+
+}
+
+#label1:hover {
+  //fill: #ace63c;
+  color: red;  
+}
+
+.c1{
+	stroke: blue;  	
+}
