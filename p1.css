@@ -1,6 +1,17 @@
+
+/*
 #svg1{
 	width:200px;
 	height:500px;
+	background-color:pink;
+}
+*/
+
+.gridCell1{
+	width:350px;
+	height:500px;
+	background-color:pink;
+	margin:40px;
 }
 
 

@@ -23,8 +23,15 @@
 
 <body>
   <!--  <script src="js/scripts.js"></script>  -->
-	<svg id=svg1 viewBox="0 0 610 1340" preserveAspectRatio="none">
+	<svg id=svg1 class="gridCell1" viewBox="0 0 610 1340" preserveAspectRatio="none">
 		<path id="avcd" class="c1" d="M47.4 599.6C28 408.7 259.9 291.5 265 113c1.1-38.1 25.7-88.5 50.7-91.2 27.9-3.1 51 47.7 52.4 93.2 5.4 179.4 214.3 324.9 185.7 513.5C530.9 778.9 407.3 915.1 300.6 911.5 189.6 907.7 63.5 757.9 47.4 599.6z" />
+	</svg>
+	
+	<svg id=svg2 class="gridCell1" viewBox="0 0 610 1340" preserveAspectRatio="none">	
+	</svg>
+	<svg id=svg3 class="gridCell1" viewBox="0 0 610 1340" preserveAspectRatio="none">	
+	</svg>
+	<svg id=svg4 class="gridCell1" viewBox="0 0 610 1340" preserveAspectRatio="none">	
 	</svg>
 	
 	<script>
@@ -48,11 +55,47 @@
 				circle.setAttribute('fill','red');
 				circle.setAttribute('r', radius);
 				//rect.setAttribute('stroke','red');
-				$("#svg1").append(circle);
+				$("#svg2").append(circle);
+			}
+		}
+		
+		function testSimpleCircle(center, numSections, dashCircleRadius, outerRadius){
+			var angle = 0
+			// 2*Math.pi / numSections
+			for(var i = 0 ; i < numSections ;i++){
+				x = center[0] + Math.cos(angle) * outerRadius;
+				y = center[1] + Math.sin(angle) * outerRadius;
+				angle += 2*Math.PI / numSections;
+				var circle = document.createElementNS(svgNS,'circle');
+				circle.setAttribute('cx',x);
+				circle.setAttribute('cy',y);
+				circle.setAttribute('fill','red');
+				circle.setAttribute('r', dashCircleRadius);
+				$("#svg3").append(circle);
+			}
+		}
+		
+		function testGausian(origin, rngMin, rngMax, dispWidth,yScale, numPoints, dashRadius, a, b, c){
+			rangeSpacing = (rngMax-rngMin) / numPoints;
+			dispSpacing = 1.0 * dispWidth / numPoints;
+			for(var x = rngMin, dspX=origin[0] ; x < rngMax ;x += rangeSpacing, dspX += dispSpacing){
+				var y =  -1.0 * a * Math.exp( -1.0 * Math.pow((x-b),2)) / (2*Math.pow(c, 2));
+				var dispY = origin[1] + y * yScale
+				var circle = document.createElementNS(svgNS,'circle');
+				circle.setAttribute('cx', dspX);
+				circle.setAttribute('cy', dispY);
+				circle.setAttribute('fill','red');
+				circle.setAttribute('r', dashRadius);
+				$("#svg4").append(circle);
+				
+				console.log("x=" + x + "   y=" + y + "     dispy =" + dispY)
 			}
 		}
 		
 		testAddCirclesArray([50,50], 70, 50, 12);
+		testSimpleCircle([300, 600], 64, 5, 210);
+		testGausian(/*dashRadius*/[30, 600], /*rngMin*/-5, /*rngMax*/5, 
+		/*dispWidth*/500, /*yScale*/50.0, /*numPoints*/48, /*dashRadius*/5, /*a*/5.5, /*b*/0.0, /*c*/0.5);
 	</script>
 	
 	<label id=label1>label1</label>
