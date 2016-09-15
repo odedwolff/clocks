@@ -39,3 +39,9 @@
 .c1{
 	stroke: blue;  	
 }
+
+.controlButton{
+	background-color:red;
+	color:yellow;
+
+}
