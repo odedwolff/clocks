@@ -118,8 +118,9 @@
 			}
 		}
 		
-		function pojectFunctionOnRadCrd(center, numSections, dashCircleRadius, outerRadius, f, zoomX, zoomY, offsetAngleRad){
-			var angle = 0
+		function pojectFunctionOnRadCrd(center, numSections, dashCircleRadius, outerRadius, f, zoomX, zoomY, offsetAngleRad, colors){
+			colorsPointer = 0;
+			var angle = 0;
 			// 2*Math.pi / numSections
 			for(var i = 0 ; i < numSections ;i++){
 				//radX = Math.abs(angle) * zoomX
@@ -131,7 +132,9 @@
 				var circle = document.createElementNS(svgNS,'circle');
 				circle.setAttribute('cx',x);
 				circle.setAttribute('cy',y);
-				circle.setAttribute('fill','red');
+				//circle.setAttribute('fill','red');
+				circle.setAttribute('fill', colors[colorsPointer]);
+				colorsPointer = (colorsPointer + 1) % colors.length;
 				circle.setAttribute('r', dashCircleRadius);
 				$("#svg2").append(circle);
 			}
@@ -152,7 +155,7 @@
 			f = gausian(5.5, 0, 0.5);
 			pojectFunctionOnRadCrd(/*center */[450, 400], 
 			/*numSections*/ 256, /*dashCircleRadius*/ 2, /*outerRadius*/250, f, /*zoomX*/11.0,/*zoomY*/ 0.03, 
-			/*offsetAngleRad*/Math.PI);
+			/*offsetAngleRad*/Math.PI, colors);
 		}
 		
 		
@@ -197,6 +200,9 @@
 		
 		var testClickInterval;
 		var secondsTime = 0;
+		var colors = ["red", "orange", "yellow"];
+		//var colorPointer = 0;
+		
 		function testStartTicking(){
 			var tick = function(){
 				secondsTime = (secondsTime + 1) % 60;
@@ -204,7 +210,7 @@
 				f = gausian(5.5, 0, 0.5);
 				pojectFunctionOnRadCrd(/*center */[450, 400], 
 				/*numSections*/ 117, /*dashCircleRadius*/ 2, /*outerRadius*/250, f, /*zoomX*/8.0,/*zoomY*/ 0.02, 
-				/*offsetAngleRad*/ Math.PI * 2 * secondsTime / 60);
+				/*offsetAngleRad*/ Math.PI * 2 * secondsTime / 60, /*colors*/colors);
 				
 			}
 			testClickInterval = setInterval(tick, 1000);
