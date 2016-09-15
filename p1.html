@@ -99,7 +99,7 @@
 		}
 		
 		//f is a symmetric function around 0 
-		function pojectFunctionOnRadCrd(center, numSections, dashCircleRadius, outerRadius, f, zoomX, zoomY, offsetAngleRad){
+		function pojectFunctionOnRadCrdOld(center, numSections, dashCircleRadius, outerRadius, f, zoomX, zoomY, offsetAngleRad){
 			var angle = 0
 			// 2*Math.pi / numSections
 			for(var i = 0 ; i < numSections ;i++){
@@ -117,6 +117,28 @@
 				$("#svg2").append(circle);
 			}
 		}
+		
+		function pojectFunctionOnRadCrd(center, numSections, dashCircleRadius, outerRadius, f, zoomX, zoomY, offsetAngleRad){
+			var angle = 0
+			// 2*Math.pi / numSections
+			for(var i = 0 ; i < numSections ;i++){
+				//radX = Math.abs(angle) * zoomX
+				angVar = Math.abs(sharpAngel(angle - offsetAngleRad) * zoomX)
+				console.log("angel = " + angle + "   ngVar=" + angVar);
+				x = center[0] + Math.cos(angle) * outerRadius * (1 + zoomY * f(angVar));
+				y = center[1] + Math.sin(angle) * outerRadius * (1 + zoomY * f(angVar));
+				angle += 2*Math.PI / numSections;
+				var circle = document.createElementNS(svgNS,'circle');
+				circle.setAttribute('cx',x);
+				circle.setAttribute('cy',y);
+				circle.setAttribute('fill','red');
+				circle.setAttribute('r', dashCircleRadius);
+				$("#svg2").append(circle);
+			}
+		}
+		
+		
+		
 		
 		function sharpAngel(angle){
 			if(angle > Math.PI){
@@ -181,8 +203,8 @@
 				$("#svg2").empty();
 				f = gausian(5.5, 0, 0.5);
 				pojectFunctionOnRadCrd(/*center */[450, 400], 
-				/*numSections*/ 240, /*dashCircleRadius*/ 2, /*outerRadius*/250, f, /*zoomX*/8.0,/*zoomY*/ 0.02, 
-				/*offsetAngleRad*/Math.PI * 2 * secondsTime / 60);
+				/*numSections*/ 117, /*dashCircleRadius*/ 2, /*outerRadius*/250, f, /*zoomX*/8.0,/*zoomY*/ 0.02, 
+				/*offsetAngleRad*/ Math.PI * 2 * secondsTime / 60);
 				
 			}
 			testClickInterval = setInterval(tick, 1000);
