@@ -114,11 +114,17 @@
 			// 2*Math.pi / numSections
 			for(var i = 0 ; i < numSections ;i++){
 				//radX = Math.abs(angle) * zoomX
-				angVar = Math.abs(sharpAngel(angle - offsetAngleRad) * zoomX)
+				
+				//angVar = Math.abs(sharpAngel((angle - offsetAngleRad))* zoomX );
+				angVar = Math.abs(sharpAngel((Math.abs(angle - offsetAngleRad)))* zoomX );
+				
+				
+				
 				//console.log("angel = " + angle + "   ngVar=" + angVar);
 				x = center[0] + Math.cos(angle) * outerRadius * (1 + zoomY * f(angVar));
 				y = center[1] + Math.sin(angle) * outerRadius * (1 + zoomY * f(angVar));
 				angle += 2*Math.PI / numSections;
+				angle = angle % (2*Math.PI);
 				var circle = document.createElementNS(svgNS,'circle');
 				circle.setAttribute('cx',x);
 				circle.setAttribute('cy',y);
@@ -146,7 +152,7 @@
 			f = fCustom1(2.5, 25.0, 1.25);
 			pojectFunctionOnRadCrd(/*center */[450, 400], 
 			/*numSections*/ 200, /*dashCircleRadius*/ 3, /*outerRadius*/250, f, /*zoomX*/11.0,/*zoomY*/ 0.03, 
-			/*offsetAngleRad*/Math.PI, colors);
+			/*offsetAngleRad*/Math.PI * 1.95, colors);
 		}
 		
 		
