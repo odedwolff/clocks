@@ -98,24 +98,14 @@
 			return f;
 		}
 		
-		//f is a symmetric function around 0 
-		function pojectFunctionOnRadCrdOld(center, numSections, dashCircleRadius, outerRadius, f, zoomX, zoomY, offsetAngleRad){
-			var angle = 0
-			// 2*Math.pi / numSections
-			for(var i = 0 ; i < numSections ;i++){
-				//radX = Math.abs(angle) * zoomX
-				angVar = Math.abs(sharpAngel(angle) * zoomX)
-				console.log("angel = " + angle + "   ngVar=" + angVar);
-				x = center[0] + Math.cos(angle + offsetAngleRad) * outerRadius * (1 + zoomY * f(angVar));
-				y = center[1] + Math.sin(angle + offsetAngleRad) * outerRadius * (1 + zoomY * f(angVar));
-				angle += 2*Math.PI / numSections;
-				var circle = document.createElementNS(svgNS,'circle');
-				circle.setAttribute('cx',x);
-				circle.setAttribute('cy',y);
-				circle.setAttribute('fill','red');
-				circle.setAttribute('r', dashCircleRadius);
-				$("#svg2").append(circle);
+		
+		//cos(​t)*​1/​(6+​(t/​2)^​2)
+		function fCustom1(scaleX, scaleY, decay){
+			f = function(x){
+				x = x*scaleX;
+				return scaleY * Math.cos(x) / (6  + Math.pow(x/2, decay)); 
 			}
+			return f;
 		}
 		
 		function pojectFunctionOnRadCrd(center, numSections, dashCircleRadius, outerRadius, f, zoomX, zoomY, offsetAngleRad, colors){
@@ -125,7 +115,7 @@
 			for(var i = 0 ; i < numSections ;i++){
 				//radX = Math.abs(angle) * zoomX
 				angVar = Math.abs(sharpAngel(angle - offsetAngleRad) * zoomX)
-				console.log("angel = " + angle + "   ngVar=" + angVar);
+				//console.log("angel = " + angle + "   ngVar=" + angVar);
 				x = center[0] + Math.cos(angle) * outerRadius * (1 + zoomY * f(angVar));
 				y = center[1] + Math.sin(angle) * outerRadius * (1 + zoomY * f(angVar));
 				angle += 2*Math.PI / numSections;
@@ -152,32 +142,15 @@
 		}
 		
 		function testRadProj(){
-			f = gausian(5.5, 0, 0.5);
+			//f = gausian(5.5, 0, 0.5);
+			f = fCustom1(2.5, 25.0, 1.25);
 			pojectFunctionOnRadCrd(/*center */[450, 400], 
-			/*numSections*/ 256, /*dashCircleRadius*/ 2, /*outerRadius*/250, f, /*zoomX*/11.0,/*zoomY*/ 0.03, 
+			/*numSections*/ 200, /*dashCircleRadius*/ 3, /*outerRadius*/250, f, /*zoomX*/11.0,/*zoomY*/ 0.03, 
 			/*offsetAngleRad*/Math.PI, colors);
 		}
 		
 		
 		
-		
-		
-		function testGausianOld(origin, rngMin, rngMax, dispWidth,yScale, numPoints, dashRadius, a, b, c){
-			rangeSpacing = (rngMax-rngMin) / numPoints;
-			dispSpacing = 1.0 * dispWidth / numPoints;
-			for(var x = rngMin, dspX=origin[0] ; x < rngMax ;x += rangeSpacing, dspX += dispSpacing){
-				var y =  -1.0 * a * Math.exp( -1.0 * Math.pow((x-b),2)) / (2*Math.pow(c, 2));
-				var dispY = origin[1] + y * yScale
-				var circle = document.createElementNS(svgNS,'circle');
-				circle.setAttribute('cx', dspX);
-				circle.setAttribute('cy', dispY);
-				circle.setAttribute('fill','red');
-				circle.setAttribute('r', dashRadius);
-				$("#svg4").append(circle);
-				
-				//console.log("x=" + x + "   y=" + y + "     dispy =" + dispY)
-			}
-		}
 		
 		function testGausian(origin, rngMin, rngMax, dispWidth,yScale, numPoints, dashRadius, a, b, c){
 			gs = gausian(a,b,c);
@@ -198,18 +171,39 @@
 			}
 		}
 		
+		
+		
+		function testOnCartesian(origin, rngMin, rngMax, dispWidth,yScale, numPoints, dashRadius, f){
+			rangeSpacing = (rngMax-rngMin) / numPoints;
+			dispSpacing = 1.0 * dispWidth / numPoints;
+			for(var x = rngMin, dspX=origin[0] ; x < rngMax ;x += rangeSpacing, dspX += dispSpacing){
+				//var y =  -1.0 * a * Math.exp( -1.0 * Math.pow((x-b),2)) / (2*Math.pow(c, 2));
+				var y = -1.0 * f(x);
+				var dispY = origin[1] + y * yScale
+				var circle = document.createElementNS(svgNS,'circle');
+				circle.setAttribute('cx', dspX);
+				circle.setAttribute('cy', dispY);
+				circle.setAttribute('fill','red');
+				circle.setAttribute('r', dashRadius);
+				$("#svg4").append(circle);
+				
+				//console.log("x=" + x + "   y=" + y + "     dispy =" + dispY)
+			}
+		}
+		
 		var testClickInterval;
 		var secondsTime = 0;
-		var colors = ["red", "orange", "yellow"];
+		var colors = ["white", "orange", "yellow"];
 		//var colorPointer = 0;
 		
 		function testStartTicking(){
 			var tick = function(){
 				secondsTime = (secondsTime + 1) % 60;
 				$("#svg2").empty();
-				f = gausian(5.5, 0, 0.5);
+				//f = gausian(5.5, 0, 0.5);
+				f = fCustom1(/*scaleX*/4.0, /*scaleY*/33.0,/*decay*/ 1.5);
 				pojectFunctionOnRadCrd(/*center */[450, 400], 
-				/*numSections*/ 117, /*dashCircleRadius*/ 2, /*outerRadius*/250, f, /*zoomX*/8.0,/*zoomY*/ 0.02, 
+				/*numSections*/ 250, /*dashCircleRadius*/ 2, /*outerRadius*/250, f, /*zoomX*/8.0,/*zoomY*/ 0.02, 
 				/*offsetAngleRad*/ Math.PI * 2 * secondsTime / 60, /*colors*/colors);
 				
 			}
@@ -223,8 +217,15 @@
 		
 		testAddCirclesArray([50,50], 70, 50, 12);
 		testSimpleCircle([300, 600], 64, 5, 210);
-		testGausian(/*origin*/[30, 600], /*rngMin*/-5, /*rngMax*/5, 
-		/*dispWidth*/500, /*yScale*/50.0, /*numPoints*/48, /*dashRadius*/5, /*a*/5.5, /*b*/0.0, /*c*/0.5);
+		
+		//f = gausian(/*a*/5.5, /*b*/0.0, /*c*/0.5);
+		f = fCustom1(3.0, 4.0, 2.0);
+		
+		testOnCartesian(/*origin*/[30, 600], /*rngMin*/-5, /*rngMax*/5, /*dispWidth*/500, /*yScale*/50.0, 
+		/*numPoints*/48, /*dashRadius*/5, f);
+		
+		// testGausian(/*origin*/[30, 600], /*rngMin*/-5, /*rngMax*/5, 
+		// /*dispWidth*/500, /*yScale*/50.0, /*numPoints*/48, /*dashRadius*/5, /*a*/5.5, /*b*/0.0, /*c*/0.5);
 		
 		testRadProj();
 	</script>
