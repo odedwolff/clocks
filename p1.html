@@ -89,7 +89,7 @@
 			}
 		}
 	
-		//returns a funciton of x
+		//returns a function of x
 		function gausian(a,b,c){
 			f = function (x){
 				//return -1.0 * a * Math.exp( -1.0 * Math.pow((x-b),2)) / (2*Math.pow(c, 2));
@@ -100,10 +100,13 @@
 		
 		
 		//cos(​t)*​1/​(6+​(t/​2)^​2)
+		//decay must be integer !!
 		function fCustom1(scaleX, scaleY, decay){
 			f = function(x){
 				x = x*scaleX;
+				//x = Math.abs(x);
 				return scaleY * Math.cos(x) / (6  + Math.pow(x/2, decay)); 
+				//return scaleY * Math.cos(x) / (6  + (Math.pow(x/2, decay))); 
 			}
 			return f;
 		}
@@ -115,16 +118,19 @@
 			for(var i = 0 ; i < numSections ;i++){
 				//radX = Math.abs(angle) * zoomX
 				
-				//angVar = Math.abs(sharpAngel((angle - offsetAngleRad))* zoomX );
-				angVar = Math.abs(sharpAngel((Math.abs(angle - offsetAngleRad)))* zoomX );
+				angVar = sharpAngel(angle - offsetAngleRad) * zoomX;
+				//angVar = Math.abs(sharpAngel((Math.abs(angle - offsetAngleRad)))* zoomX );
 				
 				
+				addedRad = f(angVar);
+				console.log("angle,angVar, f(angVar) " + angle + ";" + angVar + ";" + addedRad);
+				x = center[0] + Math.cos(angle) * outerRadius * (1 + zoomY * addedRad);
+				y = center[1] + Math.sin(angle) * outerRadius * (1 + zoomY * addedRad);
 				
-				//console.log("angel = " + angle + "   ngVar=" + angVar);
-				x = center[0] + Math.cos(angle) * outerRadius * (1 + zoomY * f(angVar));
-				y = center[1] + Math.sin(angle) * outerRadius * (1 + zoomY * f(angVar));
+				console.log("x,y = " + x + ";" + y );
+				
 				angle += 2*Math.PI / numSections;
-				angle = angle % (2*Math.PI);
+				//angle = angle % (2*Math.PI);
 				var circle = document.createElementNS(svgNS,'circle');
 				circle.setAttribute('cx',x);
 				circle.setAttribute('cy',y);
@@ -133,6 +139,8 @@
 				colorsPointer = (colorsPointer + 1) % colors.length;
 				circle.setAttribute('r', dashCircleRadius);
 				$("#svg2").append(circle);
+				
+				
 			}
 		}
 		
@@ -140,16 +148,31 @@
 		
 		
 		function sharpAngel(angle){
-			if(angle > Math.PI){
+			/**
+			
+			//if(angle > Math.PI){
+			angle = angle % (2*Math.PI);
+			if(angle > Math.PI || angle < -Math.PI ){
 				return  -1 * (2*Math.PI - angle);
 			}
 			//else
 			return angle;
+			**/
+			angle = angle % (2*Math.PI);
+			if(angle > Math.PI){
+				return  -1 * (2*Math.PI - angle);
+			}
+			if(angle <  -Math.PI){
+				return  (2*Math.PI + angle);
+			}
+			return angle; 
+			
 		}
 		
 		function testRadProj(){
 			//f = gausian(5.5, 0, 0.5);
-			f = fCustom1(2.5, 25.0, 1.25);
+			f = fCustom1(2.5, 25.0, 2);
+			
 			pojectFunctionOnRadCrd(/*center */[450, 400], 
 			/*numSections*/ 200, /*dashCircleRadius*/ 3, /*outerRadius*/250, f, /*zoomX*/11.0,/*zoomY*/ 0.03, 
 			/*offsetAngleRad*/Math.PI * 1.95, colors);
@@ -207,7 +230,7 @@
 				secondsTime = (secondsTime + 1) % 60;
 				$("#svg2").empty();
 				//f = gausian(5.5, 0, 0.5);
-				f = fCustom1(/*scaleX*/4.0, /*scaleY*/33.0,/*decay*/ 1.5);
+				f = fCustom1(/*scaleX*/4.0, /*scaleY*/33.0,/*decay*/ 2);
 				pojectFunctionOnRadCrd(/*center */[450, 400], 
 				/*numSections*/ 250, /*dashCircleRadius*/ 2, /*outerRadius*/250, f, /*zoomX*/8.0,/*zoomY*/ 0.02, 
 				/*offsetAngleRad*/ Math.PI * 2 * secondsTime / 60, /*colors*/colors);
@@ -221,19 +244,19 @@
 		
 		
 		
-		testAddCirclesArray([50,50], 70, 50, 12);
-		testSimpleCircle([300, 600], 64, 5, 210);
+		//testAddCirclesArray([50,50], 70, 50, 12);
+		//testSimpleCircle([300, 600], 64, 5, 210);
 		
 		//f = gausian(/*a*/5.5, /*b*/0.0, /*c*/0.5);
-		f = fCustom1(3.0, 4.0, 2.0);
 		
-		testOnCartesian(/*origin*/[30, 600], /*rngMin*/-5, /*rngMax*/5, /*dispWidth*/500, /*yScale*/50.0, 
-		/*numPoints*/48, /*dashRadius*/5, f);
+		//f = fCustom1(2.5, 25.0, 2);
 		
-		// testGausian(/*origin*/[30, 600], /*rngMin*/-5, /*rngMax*/5, 
-		// /*dispWidth*/500, /*yScale*/50.0, /*numPoints*/48, /*dashRadius*/5, /*a*/5.5, /*b*/0.0, /*c*/0.5);
+		//testOnCartesian(/*origin*/[30, 600], /*rngMin*/-5, /*rngMax*/5, /*dispWidth*/500, /*yScale*/50.0, 
+		///*numPoints*/48, /*dashRadius*/5, f);
 		
 		testRadProj();
+		
+		
 	</script>
 	
 	<label id=label1>label1</label>
