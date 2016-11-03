@@ -111,7 +111,7 @@
 			return f;
 		}
 		
-		function pojectFunctionOnRadCrd(center, numSections, dashCircleRadius, outerRadius, f, zoomX, zoomY, offsetAngleRad, colors){
+		function pojectFunctionOnRadCrd(panelName, center, numSections, dashCircleRadius, outerRadius, f, zoomX, zoomY, offsetAngleRad, colors){
 			colorsPointer = 0;
 			var angle = 0;
 			// 2*Math.pi / numSections
@@ -138,7 +138,8 @@
 				circle.setAttribute('fill', colors[colorsPointer]);
 				colorsPointer = (colorsPointer + 1) % colors.length;
 				circle.setAttribute('r', dashCircleRadius);
-				$("#svg2").append(circle);
+				//$("#svg2").append(circle);
+                                $("#" + panelName).append(circle);
 				
 				
 			}
@@ -169,11 +170,11 @@
 			
 		}
 		
-		function testRadProj(){
+		function testRadProj(panelName){
 			//f = gausian(5.5, 0, 0.5);
 			f = fCustom1(2.5, 25.0, 2);
 			
-			pojectFunctionOnRadCrd(/*center */[450, 400], 
+			pojectFunctionOnRadCrd(/*panel name*/panelName, /*center */[450, 400], 
 			/*numSections*/ 200, /*dashCircleRadius*/ 3, /*outerRadius*/250, f, /*zoomX*/11.0,/*zoomY*/ 0.03, 
 			/*offsetAngleRad*/Math.PI * 1.95, colors);
 		}
@@ -231,15 +232,77 @@
 				$("#svg2").empty();
 				//f = gausian(5.5, 0, 0.5);
 				f = fCustom1(/*scaleX*/4.0, /*scaleY*/33.0,/*decay*/ 2);
-				pojectFunctionOnRadCrd(/*center */[450, 400], 
+				pojectFunctionOnRadCrd(/*panelName */"svg2", /*center */[450, 400], 
 				/*numSections*/ 250, /*dashCircleRadius*/ 2, /*outerRadius*/250, f, /*zoomX*/8.0,/*zoomY*/ 0.02, 
 				/*offsetAngleRad*/ Math.PI * 2 * secondsTime / 60, /*colors*/colors);
 				
 			}
 			testClickInterval = setInterval(tick, 1000);
 		}
+                
+                
+                function testStartTickingFaster(numPracitalPerSecond){
+                        var currentTick = 0;
+                        numOfTicks = numPracitalPerSecond * 60;
+                        var tick = function(){
+				//secondsTime = (secondsTime + 1) % 60;
+				$("#svg3").empty();
+				//f = gausian(5.5, 0, 0.5);
+				f = fCustom1(/*scaleX*/4.0, /*scaleY*/33.0,/*decay*/ 2);
+				pojectFunctionOnRadCrd(/*panelName */"svg3", /*center */[450, 400], 
+				/*numSections*/ 250, /*dashCircleRadius*/ 2, /*outerRadius*/250, f, /*zoomX*/8.0,/*zoomY*/ 0.02, 
+				/*offsetAngleRad*/ Math.PI * 2 * currentTick / numOfTicks , /*colors*/colors);
+                                currentTick = (currentTick + 1) % numOfTicks;
+				
+			}
+			testClickIntervalFast = setInterval(tick, 1000 / numPracitalPerSecond );
+		}
+                
+                
+                
+                function testStartTickingCheckClock(numPracitalPerSecond, panelName){
+                        var currentTick = 0;
+                        var d = new Date();
+                        numOfTicks = numPracitalPerSecond * 60;
+                        var curruentSecProp;
+                        var time;
+                        var tick = function(){
+                                d = new Date();
+                                time = d.getTime();
+                                curruentSecProp = (time % (1000 * 60)) / (1000 * 60);
+				//secondsTime = (secondsTime + 1) % 60;
+				$("#" + panelName).empty();
+				//f = gausian(5.5, 0, 0.5);
+				f = fCustom1(/*scaleX*/4.0, /*scaleY*/33.0,/*decay*/ 2);
+				pojectFunctionOnRadCrd(/*panelName */panelName, /*center */[450, 400], 
+				/*numSections*/ 250, /*dashCircleRadius*/ 2, /*outerRadius*/250, f, /*zoomX*/8.0,/*zoomY*/ 0.02, 
+				/*offsetAngleRad*/ Math.PI * 2 * curruentSecProp , /*colors*/colors);
+                                
+                                //currentTick = (currentTick + 1) % numOfTicks;
+                               
+                                //currentTick = (time % (1000 * 60)) / (1000 * 60) * numOfTicks;
+                                
+				
+			}
+			testClickIntervalFast = setInterval(tick, 1000 / numPracitalPerSecond );
+		}
+                
+                
+                
+                
+                
+                
 		
-		$("#start").click(testStartTicking);
+		//$("#start").click(testStartTicking);
+                $("#start").click(function(){
+                    testStartTicking();
+                    //testStartTickingFaster(5);
+                    testStartTickingCheckClock(1, "svg3");
+                    testStartTickingCheckClock(11, "svg4");
+                    
+                });
+                
+                
 		$("#stop").click(function(){clearInterval(testClickInterval)});
 		
 		
@@ -254,7 +317,7 @@
 		//testOnCartesian(/*origin*/[30, 600], /*rngMin*/-5, /*rngMax*/5, /*dispWidth*/500, /*yScale*/50.0, 
 		///*numPoints*/48, /*dashRadius*/5, f);
 		
-		testRadProj();
+		testRadProj("svg2");
 		
 		
 	</script>
@@ -280,3 +343,4 @@
 
 
 
+a
