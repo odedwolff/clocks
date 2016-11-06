@@ -12,6 +12,7 @@
 	height:700px;
 	background-color:black;
 	margin:40px;
+	color:yellow;
 }
 
 
@@ -43,5 +44,15 @@
 .controlButton{
 	background-color:red;
 	color:yellow;
-
 }
+
+.panelCls{
+	background:gray;
+	color:yellow;
+	
+	margin: 20%;
+    padding-left: 10%;
+    width: 50%;
+}
+
+

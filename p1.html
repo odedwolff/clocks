@@ -15,37 +15,46 @@
   
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <link rel="stylesheet" href="p1.css">
+  <script src="nav.js"></script>
 
   <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+	
   <![endif]-->
 </head>
 
 <body>
   <!--  <script src="js/scripts.js"></script>  -->
 	
-	<button id=start class="controlButton">start</button>
-	<button id=stop	 class="controlButton">stop</button>
-	
-	<svg id=svg1 class="gridCell1" viewBox="0 0 610 1340" preserveAspectRatio="none">
-		<path id="avcd" class="c1" d="M47.4 599.6C28 408.7 259.9 291.5 265 113c1.1-38.1 25.7-88.5 50.7-91.2 27.9-3.1 51 47.7 52.4 93.2 5.4 179.4 214.3 324.9 185.7 513.5C530.9 778.9 407.3 915.1 300.6 911.5 189.6 907.7 63.5 757.9 47.4 599.6z" />
-	</svg>
-	<!--
-	<svg id=svg2 class="gridCell1" viewBox="0 0 610 1340" preserveAspectRatio="none">	
-	</svg>
-	<svg id=svg3 class="gridCell1" viewBox="0 0 610 1340" preserveAspectRatio="none">	
-	</svg>
-	<svg id=svg4 class="gridCell1" viewBox="0 0 610 1340" preserveAspectRatio="none">	
-	</svg>
-	-->
-	
-	<svg id=svg2 class="gridCell1" viewBox="0 0 800 800" preserveAspectRatio="none">	
-	</svg>
-	<svg id=svg3 class="gridCell1" viewBox="0 0 800 800" preserveAspectRatio="none">	
-	</svg>
-	<svg id=svg4 class="gridCell1" viewBox="0 0 800 800" preserveAspectRatio="none">	
-	</svg>
-	
+	<div id = root>
+		<button id=start class="controlButton">start</button>
+		<button id=stop	 class="controlButton">stop</button>
+		<button id=next class="controlButton">next</button>
+		<button id=prev	 class="controlButton">prev</button>
+		
+		<div id = svgCont>
+			<div id = panel1 class = panelCls>
+				<svg id=svg1 class="gridCell1" viewBox="0 0 610 1340" preserveAspectRatio="none">
+					<path id="avcd" class="c1" d="M47.4 599.6C28 408.7 259.9 291.5 265 113c1.1-38.1 25.7-88.5 50.7-91.2 27.9-3.1 51 47.7 52.4 93.2 5.4 179.4 214.3 324.9 185.7 513.5C530.9 778.9 407.3 915.1 300.6 911.5 189.6 907.7 63.5 757.9 47.4 599.6z" />
+				</svg>
+			</div>
+			<div id = panel2	class = panelCls>
+				<svg id=svg2 class="gridCell1" viewBox="0 0 800 800" preserveAspectRatio="none">
+					<p>svg1</p>
+				</svg>
+			</div>
+			<div id = panel3	class = panelCls>
+				<svg id=svg3 class="gridCell1" viewBox="0 0 800 800" preserveAspectRatio="none">
+					<p>svg2</p>
+				</svg>
+			</div>
+			<div id = panel4	class = panelCls>
+				<svg id=svg4 class="gridCell1" viewBox="0 0 800 800" preserveAspectRatio="none">
+					<p>svg3</p>
+				</svg>
+			</div>
+		<div>
+	<div>
 	
 	
 	<script>
@@ -305,6 +314,10 @@
                 
 		$("#stop").click(function(){clearInterval(testClickInterval)});
 		
+		$("#next").click(nav.pageUp);
+		$("#prev").click(nav.pageDown);
+		
+		
 		
 		
 		//testAddCirclesArray([50,50], 70, 50, 12);
@@ -317,9 +330,9 @@
 		//testOnCartesian(/*origin*/[30, 600], /*rngMin*/-5, /*rngMax*/5, /*dispWidth*/500, /*yScale*/50.0, 
 		///*numPoints*/48, /*dashRadius*/5, f);
 		
-		testRadProj("svg2");
+		//testRadProj("svg2");
 		
-		
+		nav.initPanels();
 	</script>
 	
 	<label id=label1>label1</label>
