@@ -27,10 +27,12 @@
   <!--  <script src="js/scripts.js"></script>  -->
 	
 	<div id = root>
-		<button id=start class="controlButton">start</button>
-		<button id=stop	 class="controlButton">stop</button>
-		<button id=next class="controlButton">next</button>
-		<button id=prev	 class="controlButton">prev</button>
+		<div id = buttonsPanel1>
+			<button id=start class="controlButton">start</button>
+			<button id=stop	 class="controlButton">stop</button>
+			<button id=next class="controlButton">next</button>
+			<button id=prev	 class="controlButton">prev</button>
+		</div>
 		
 		<div id = svgCont>
 			<div id = panel1 class = panelCls>
@@ -250,10 +252,10 @@
 		}
                 
                 
-                function testStartTickingFaster(numPracitalPerSecond){
-                        var currentTick = 0;
-                        numOfTicks = numPracitalPerSecond * 60;
-                        var tick = function(){
+        function testStartTickingFaster(numPracitalPerSecond){
+                var currentTick = 0;
+                numOfTicks = numPracitalPerSecond * 60;
+                var tick = function(){
 				//secondsTime = (secondsTime + 1) % 60;
 				$("#svg3").empty();
 				//f = gausian(5.5, 0, 0.5);
@@ -261,7 +263,7 @@
 				pojectFunctionOnRadCrd(/*panelName */"svg3", /*center */[450, 400], 
 				/*numSections*/ 250, /*dashCircleRadius*/ 2, /*outerRadius*/250, f, /*zoomX*/8.0,/*zoomY*/ 0.02, 
 				/*offsetAngleRad*/ Math.PI * 2 * currentTick / numOfTicks , /*colors*/colors);
-                                currentTick = (currentTick + 1) % numOfTicks;
+                currentTick = (currentTick + 1) % numOfTicks;
 				
 			}
 			testClickIntervalFast = setInterval(tick, 1000 / numPracitalPerSecond );
@@ -269,7 +271,7 @@
                 
                 
                 
-                function testStartTickingCheckClock(numPracitalPerSecond, panelName){
+        function startTickingFCst1CheckClock(numPracitalPerSecond, panelName){
                         var currentTick = 0;
                         var d = new Date();
                         numOfTicks = numPracitalPerSecond * 60;
@@ -287,13 +289,9 @@
 				/*numSections*/ 250, /*dashCircleRadius*/ 2, /*outerRadius*/250, f, /*zoomX*/8.0,/*zoomY*/ 0.02, 
 				/*offsetAngleRad*/ Math.PI * 2 * curruentSecProp , /*colors*/colors);
                                 
-                                //currentTick = (currentTick + 1) % numOfTicks;
-                               
-                                //currentTick = (time % (1000 * 60)) / (1000 * 60) * numOfTicks;
-                                
 				
 			}
-			testClickIntervalFast = setInterval(tick, 1000 / numPracitalPerSecond );
+			return setInterval(tick, 1000 / numPracitalPerSecond );
 		}
                 
                 
@@ -305,9 +303,8 @@
 		//$("#start").click(testStartTicking);
                 $("#start").click(function(){
                     testStartTicking();
-                    //testStartTickingFaster(5);
-                    testStartTickingCheckClock(1, "svg3");
-                    testStartTickingCheckClock(11, "svg4");
+                    startTickingFCst1CheckClock(1, "svg3");
+                    startTickingFCst1CheckClock(11, "svg4");
                     
                 });
                 

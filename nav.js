@@ -16,8 +16,13 @@ var panels = [
 		},
 		{
 			name:"panel3",
-			onHide : function(){},
-			onShow : function(){}
+			interval : -1, 
+			onHide : function(){
+				clearInterval(interval);
+			},
+			onShow : function(){
+				interval = startTickingFCst1CheckClock(11, "svg3");
+			}
 		},
 		{
 			name:"panel4",
